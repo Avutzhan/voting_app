@@ -13,9 +13,13 @@ var indexRoutes = require("./routes/index"),
     
 
 mongoose.connect("mongodb://" + process.env.mongo_user + ":" + process.env.mongo_pwd + "@" + process.env.mongo_uri);
+app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
-app.use(express.static(__dirname + "/public"));
+
+
+var seeds = require("./models/seeds.js");
+seeds();
 
 app.use("/", indexRoutes);
 app.use("/user", userRoutes);
