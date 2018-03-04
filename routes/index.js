@@ -1,9 +1,16 @@
-var express = require("express");
-var router  = express.Router();
+var express = require("express"),
+    router  = express.Router(),
+    pollModel = require("../models/poll.js");
 
 //root route
 router.get("/", function(req, res){
-    res.render("index");
+    pollModel.find()
+    .sort({ dateCreated: "descending" })
+    .exec(function(err, polls,next) {
+        if (err) { return next(err); }
+        console.log(polls);
+        res.render("index", { polls: polls });
+    });
 });
 
 module.exports = router;

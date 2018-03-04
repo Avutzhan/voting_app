@@ -18,11 +18,11 @@ userModel.remove()
 })
 
 var polls = [
-    {title: "Question 1", question :"Who is the best player", answers: [{item : "Ronaldo"},{item : "Messi"},{item : "Pele"}]},
-    {title: "Question 2", question :"What is the best city", answers: [{item : "Paris"},{item : "London"}]},
-    {title: "Question 3", question :"What is the best animal", answers: [{item : "Dog"},{item : "Cat"},{item : "Mouse"},{item : "Turkey"}]},
-    {title: "Question 4", question :"Who is the best actor", answers: [{item : "Brad Pitt"},{item : "Costner"},{item : "Di Caprio"}]},
-    {title: "Question 5", question :"Who is the best driver", answers: [{item : "Montoya"}]},
+    {title: "Question 1", question :"Who is the best player", answers: [{item : "Ronaldo", count : 2},{item : "Messi", count : 4},{item : "Pele", count : 1}]},
+    {title: "Question 2", question :"What is the best city", answers: [{item : "Paris", count : 2},{item : "London", count : 5}]},
+    {title: "Question 3", question :"What is the best animal", answers: [{item : "Dog", count : 0},{item : "Cat", count : 2},{item : "Mouse", count : 9},{item : "Turkey", count : 3}]},
+    {title: "Question 4", question :"Who is the best actor", answers: [{item : "Brad Pitt", count : 2},{item : "Costner", count : 6},{item : "Di Caprio"}]},
+    {title: "Question 5", question :"Who is the best driver", answers: [{item : "Montoya", count : 2}]},
     {title: "Question 6", question :"Who is the best worker"},
 ];
 
@@ -45,7 +45,7 @@ function load() {
                         if (err) {
                             console.log(err)
                         } else if (createdPoll) {
-                            userModel.update({_id : data._id},{$push: {polls: createdPoll._id}}, {safe : true, upsert: true}).then(dd=>console.log("HERRRE" + dd));
+                            userModel.update({_id : data._id},{$push: {polls: createdPoll._id}}, {safe : true, upsert: true}).then(pushed => console.log("Pushed poll to " + data.username));
                         }
                     });
                 });

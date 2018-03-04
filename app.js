@@ -2,7 +2,7 @@ var path = require('path'),
     bodyParser  = require("body-parser"),
     mongoose    = require("mongoose"),
     express = require('express'),
-    app = express();    
+    app = express();
 
 require('dotenv').config();
 
@@ -26,7 +26,7 @@ app.use("/user", userRoutes);
 app.use("/poll", pollRoutes);
 
 app.use(function(req, res) {
-  res.status(404).send("Sorry; the page you are looking for does not exist.");
+  res.status(404).send("Sorry, the page you are looking for does not exist.");
 });
 
 app.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function(){

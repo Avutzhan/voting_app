@@ -1,19 +1,15 @@
 html {
+    background-image: linear-gradient(45deg, #93a5cf 0%, #e4efe9 100%);
+    background-attachment: fixed;
     height: 100%;
 	width: 100%;
-    background-image: linear-gradient(45deg, #93a5cf 0%, #e4efe9 100%);
 }
 
 body {
-    background-color: transparent;
-    color: rgb(33, 37, 41) ;
-}
-
-html,body {
+	background: transparent;
 	margin: 0;
 	padding: 0 !important;
-	top: 0;
-	left: 0;
+	color: rgb(33, 37, 41);
 }
 
 .btn:focus, .btn:active, button:focus, button:active, a:focus, a:active {
@@ -45,6 +41,16 @@ h2 {
     margin-top: 2%
 }
 
+.poll_list {
+	margin : 4% auto;
+}
+
+.polls_objects {
+	color: white !important;
+	display: inline-block;
+	width: 100%;
+	margin: 2% auto;
+}
 
 .footer {
 	margin-top: 5% !important;
@@ -52,4 +58,15 @@ h2 {
 	border-top: 2px solid black;
 	width: 80%;
 	margin: auto;
+}
+
+@media screen and (max-width: 540px) {
+	h1 {
+		font-size: 3em;
+	}
+
+	h2 {
+	    font-size: 1.5em;
+	}
+
 }

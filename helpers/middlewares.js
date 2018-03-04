@@ -1,8 +1,38 @@
-var express = require("express"),
-    router  = express.Router(),
-    pollModel = require("../models/poll.js"),
-    test = require("../helpers/middlewares.js")
+exports.GraphCreator = function (poll) {
+    this.type = "pie";
+    var tempLabels = [],
+        tempCount = [],
+        tempBGC = []
+        
+    poll.answers.forEach(function(data){
+        tempLabels.push(data.item);
+        tempCount.push(data.count);
+        tempBGC.push("rgb("+ Math.floor(Math.random()*255) + ", "+ Math.floor(Math.random()*255) + ", "+ Math.floor(Math.random()*255) + ")")
+    });
+    this.data = {
+        labels: tempLabels,
+        datasets: [{
+            label: "Answers",
+            data: tempCount,
+            backgroundColor: tempBGC,
+            borderWidth: 1
+        }]
+    },
+    this.options = {
+        legend: {
+            position: "right"
+        },
+        animation: {
+			animateScale: true,
+			animateRotate: true
+		},
+        cutoutPercentage : 50
+    }
+}
 
+
+module.exports = exports;
+/*
 var t = {
                         type: 'pie',
                         data: {
@@ -18,7 +48,7 @@ var t = {
                                     'rgb(153, 102, 255)',
                                     'rgb(255, 159, 64)'
                                 ],
-                                borderWidth: 1,
+                                borderWidth: 1
                             }]
                         },
                         options: {
@@ -28,26 +58,4 @@ var t = {
                             cutoutPercentage : 50
                         }                
                     }
-
-router.get("/:pollId", function(req, res){
-    pollModel.findOne({_id : req.params.pollId}, function(err,pollRetrieved) {
-        if (err) {
-           console.log(err);
-           res.redirect("/");
-        } else {
-            var graphParameters = new test.GraphCreator(pollRetrieved);
-            console.log(graphParameters);
-            res.render("poll", {poll:pollRetrieved, graphParameters : graphParameters}); // UPDATE FOR GRAPH
-        }
-    });
-});
-
-router.post("/:pollId", function(req, res){
-    res.send("You voted for " + req.query.answer)
-});
-
-router.use(function(req, res) {
-    res.redirect("/");
-});
-
-module.exports = router;
+*/

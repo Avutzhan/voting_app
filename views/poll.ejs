@@ -1,0 +1,35 @@
+<% include partials/header %>
+    <h2><%=poll.question%></h2>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+    
+    <% if (poll.answers.length > 0) { %>
+        <section class="container poll_list">
+            <div class="row justify-content-around">
+                <div class="col-md-4">
+                    <p>Click on one of the answers below:</p>
+                    <% poll.answers.forEach(function(data){ %>    
+                        <form action="/poll/<%=poll._id%>?answer=<%=data.item%>" method="post">
+                            <input type="submit" value="<%=data.item%>" class="btn btn-dark polls_objects">
+                        </form>
+                     <% }); %>  
+                </div>
+                
+                <div class="col-md-8">
+                    <canvas id="pollChart"></canvas>
+                </div>
+                
+            </div>
+    
+        </section>
+    <% } else { %>
+        <p style="text-align:center">The author of this poll has not created any answer for this poll yet.</p>
+    <% } %>
+    <p><%=poll%></p>
+
+<% include partials/footer %>
+
+<script>
+var ctx = document.getElementById("pollChart").getContext('2d');
+var myChart = new Chart(ctx, <%- JSON.stringify(graphParameters) %>);
+</script>
