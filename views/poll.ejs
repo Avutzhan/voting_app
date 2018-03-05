@@ -9,23 +9,20 @@
                 <div class="col-md-4">
                     <p>Click on one of the answers below:</p>
                     <% poll.answers.forEach(function(data){ %>    
-                        <form action="/poll/<%=poll._id%>?answer=<%=data.item%>" method="post">
+                        <form action="/poll/<%=poll._id%>?_method=PUT&answer=<%=data.item%>" method="POST">
                             <input type="submit" value="<%=data.item%>" class="btn btn-dark polls_objects">
                         </form>
                      <% }); %>  
                 </div>
-                
                 <div class="col-md-8">
                     <canvas id="pollChart"></canvas>
                 </div>
-                
             </div>
-    
         </section>
     <% } else { %>
         <p style="text-align:center">The author of this poll has not created any answer for this poll yet.</p>
     <% } %>
-    <p><%=poll%></p>
+    
 
 <% include partials/footer %>
 

@@ -2,7 +2,8 @@ var path = require('path'),
     bodyParser  = require("body-parser"),
     mongoose    = require("mongoose"),
     express = require('express'),
-    app = express();
+    app = express(),
+    methodOverride = require("method-override");
 
 require('dotenv').config();
 
@@ -16,6 +17,7 @@ mongoose.connect("mongodb://" + process.env.mongo_user + ":" + process.env.mongo
 app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
+app.use(methodOverride('_method'));
 
 
 var seeds = require("./models/seeds.js");

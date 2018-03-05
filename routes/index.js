@@ -8,7 +8,6 @@ router.get("/", function(req, res){
     .sort({ dateCreated: "descending" })
     .exec(function(err, polls,next) {
         if (err) { return next(err); }
-        console.log(polls);
         res.render("index", { polls: polls });
     });
 });
