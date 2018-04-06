@@ -23,10 +23,19 @@
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
           <a class="nav-item nav-link" href="/">Home</a>
-          <a class="nav-item nav-link" href="/user">My Profile</a>
+          <% if(currentUser) { %>
+            <a class="nav-item nav-link" href="/user/<%= currentUser._id %>">My Profile</a>
+            <a class="nav-item nav-link" href="/poll/new">Create New Poll</a>
+          <% } %>
         </div>
         <div class="navbar-nav ml-auto">
-          <a class="nav-item nav-link justify-content-right" href="/user">Login</a>
+          <% if(!currentUser) { %>
+            <a class="nav-item nav-link justify-content-right" href="/login">Login</a>
+            <a class="nav-item nav-link justify-content-right" href="/signup">Signup</a>
+          <% } else {%>
+            <a class="nav-item nav-link justify-content-right remover"><em>Welcome <%= currentUser.username %></em></a>
+            <a class="nav-item nav-link justify-content-right" href="/logout">Logout</a>
+          <% } %>
         </div>
       </div>
     </nav>

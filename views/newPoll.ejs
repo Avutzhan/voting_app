@@ -1,0 +1,44 @@
+<% include partials/header %>
+
+    <h2>Create a New Poll</h2>
+    
+    <section class="container-fluid">
+        <form action="/poll/new" method="post">
+            <div class="form-group">
+                <label for="question">Question</label>
+                <input type="text" class="form-control" id="question" name="question" placeholder="Enter your question here" required autofocus>
+             </div>
+            <div class="form-group">
+                <label for="answers">Answers (minimum of 2)</label>
+                <div id="answersgroup">
+                    <input type="text" class="form-control answers" name="answers" placeholder="Enter possible answer here" required autofocus>
+                    <input type="text" class="form-control answers" name="answers" placeholder="Enter possible answer here" required autofocus>
+                </div>
+                <button type="button" id="addanswer" class="btn btn-primary btn-sm">Add answer</button>
+                <button type="button" id="clearanswers" class="btn btn-danger btn-sm">Clear answers</button>
+            </div>
+            <input type="submit" value="Create new poll" class="btn btn-dark btn-block">
+        </form>
+        
+    </section>
+    
+    <script>
+        window.addEventListener("load", function(event) {
+            var answerslot = '<input type="text" class="form-control answers" name="answers" placeholder="Enter possible answer here" required autofocus>';
+            document.getElementById("addanswer").addEventListener("click", function() {
+                let check = document.querySelectorAll(".answers"),
+                    test = Array.from(check).every(function(data, index, array){
+                    return data.value != "";
+                });
+                if (test) {
+                    document.getElementById("answersgroup")
+                    .insertAdjacentHTML('beforeend', answerslot);
+                }
+            });
+            document.getElementById("clearanswers").addEventListener("click", function() {
+                    document.getElementById("answersgroup").innerHTML = answerslot + answerslot;
+            });
+        });
+    </script>
+
+<% include partials/footer %>

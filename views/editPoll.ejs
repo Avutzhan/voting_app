@@ -1,0 +1,75 @@
+<% include partials/header %>
+
+    <h2>Edit Poll</h2>
+    
+    <section class="container-fluid">
+        <form action="/poll/<%= poll._id %>/edit?_method=PUT" method="post">
+            <div class="form-group">
+                <label for="question">Question</label>
+                <input type="text" class="form-control" id="question" name="question" value="<%= poll.question %>" required autofocus>
+             </div>
+            <div class="form-group">
+                <label for="deleteAnswers">Delete answers (click to select/deselect)</label>
+                    <div id="answersgroup" class="row justify-content-around">
+                        <% poll.answers.forEach(function(data){ %>
+                            <div class="col-md-6">
+                                <a class="btn btn-dark polls_objects text-truncate"><%= data.item %></a>        
+                            </div>
+                        <% }); %>    
+                    </div>
+            </div>
+            <% poll.answers.forEach(function(data){ %>
+                <div id="checkboxes" class="hide">
+                    <input type="checkbox" class="checkbox" name="toDelete" value="<%= data.item %>">
+                </div>
+            <% }); %>
+            <div class="form-group">
+                <label for="answers">Add answers</label>
+                <div id="addanswersgroup">
+                </div>
+                <button type="button" id="addanswer" class="btn btn-primary btn-sm">Add answer</button>
+                <button type="button" id="clearanswers" class="btn btn-danger btn-sm hide">Clear answers</button>
+            </div>
+            <p>Changes are only saved when "Update poll" is clicked"</p>
+            <input type="submit" value="Update poll" class="btn btn-dark btn-block">
+        </form>
+        <br>
+        <br>
+        <form action="/poll/<%= poll._id %>?_method=DELETE" method="post">
+            <input type="submit" value="DELETE POLL" class="btn btn-danger btn-block">
+        </form>
+    </section>
+    
+    <script>
+        window.addEventListener("load", function(event) {
+            var answerslot = '<input type="text" class="form-control answers" name="answers" placeholder="Enter possible answer here" required autofocus>';
+            var delButtons = document.querySelectorAll(".polls_objects"),
+                delCheckboxes = document.querySelectorAll(".checkbox");
+                console.log(delButtons);
+                console.log(delCheckboxes);
+            document.getElementById("addanswer").addEventListener("click", function() {
+                let check = document.querySelectorAll(".answers"),
+                    test = Array.from(check).every(function(data, index, array){
+                    return data.value != "";
+                });
+                if (test) {
+                    document.getElementById("addanswersgroup")
+                    .insertAdjacentHTML('beforeend', answerslot);
+                    document.getElementById("clearanswers").classList.remove("hide");
+                }
+            });
+            document.getElementById("clearanswers").addEventListener("click", function() {
+                    document.getElementById("addanswersgroup").innerHTML = "";
+                    this.classList.add("hide");
+            });
+            for (let i = 0; i < delButtons.length; i++) {
+                delCheckboxes[i].checked = false;
+                delButtons[i].addEventListener("click", function() {
+                    delCheckboxes[i].checked = delCheckboxes[i].checked ? false : true;
+                    delButtons[i].classList.toggle("deleted");
+                });
+            }
+        });
+    </script>
+
+<% include partials/footer %>

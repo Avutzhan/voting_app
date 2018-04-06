@@ -1,8 +1,41 @@
 <% include partials/header %>
-    <br>
-    <br>
-    <br>
-    <br>
-    <p>User</p>
+
+    <% if (polls.length > 0) { %>    
+
+    <h2>Click on one of the polls below to modify or delete it.</h2>
+
+        <section class="container poll_list">
+            <div class="row justify-content-around">
+                <% polls.forEach(function(data){ %>
+                    <div class="col-md-6">
+                        <a href="/poll/<%=data._id%>/edit" class="btn btn-dark polls_objects text-truncate"><%= data.question %></a>        
+                    </div>
+                <% }); %>  
+            </div>
+        </section>
+    <% } else { %>
+        <h2>You currently do not have any poll. Click on the button below to create one.</h2>
+        
+        <section class="container-fluid">
+            <a href="/poll/new" class="btn btn-dark polls_objects text-truncate">Create a New Poll</a>        
+        </section>
+        
+    <% } %>
+    
+    <h2>You can modify your password below.</h2>
+    
+    <section class="container-fluid">
+        <form action="/user/<%= currentUser._id %>?_method=PUT" method="post">
+            <div class="form-group">
+                <label for="password">New Password</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Enter New Password" required autofocus>
+            </div>
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" required autofocus>
+            </div>              
+            <input type="submit" value="Change Password" class="btn btn-dark btn-block">
+        </form>
+    </section>
     
 <% include partials/footer %>

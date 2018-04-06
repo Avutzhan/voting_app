@@ -18,12 +18,12 @@ userModel.remove()
 })
 
 var polls = [
-    {title: "Question 1", question :"Who is the best player", answers: [{item : "Ronaldo", count : 2},{item : "Messi", count : 4},{item : "Pele", count : 1}]},
-    {title: "Question 2", question :"What is the best city", answers: [{item : "Paris", count : 2},{item : "London", count : 5}]},
-    {title: "Question 3", question :"What is the best animal", answers: [{item : "Dog", count : 0},{item : "Cat", count : 2},{item : "Mouse", count : 9},{item : "Turkey", count : 3}]},
-    {title: "Question 4", question :"Who is the best actor", answers: [{item : "Brad Pitt", count : 2},{item : "Costner", count : 6},{item : "Di Caprio"}]},
-    {title: "Question 5", question :"Who is the best driver", answers: [{item : "Montoya", count : 2}]},
-    {title: "Question 6", question :"Who is the best worker"},
+    {question :"Who is the best player", answers: [{item : "Ronaldo", count : 2},{item : "Messi", count : 4},{item : "Pele", count : 1}]},
+    {question :"What is the best city", answers: [{item : "Paris", count : 2},{item : "London", count : 5}]},
+    {question :"What is the best animal", answers: [{item : "Dog", count : 0},{item : "Cat", count : 2},{item : "Mouse", count : 9},{item : "Turkey", count : 3}]},
+    {question :"Who is the best actor", answers: [{item : "Brad Pitt", count : 2},{item : "Costner", count : 6},{item : "Di Caprio"}]},
+    {question :"Who is the best driver", answers: [{item : "Montoya", count : 2}]},
+    {question :"Who is the best worker"},
 ];
 
 var users = [
@@ -38,12 +38,12 @@ function load() {
     users.forEach(function(seed){
         userModel.create(seed[0], function(err, data){
             if (err) {
-                console.log(err);  
+                console.log(err);  // MODIFY HERE
             } else {
                 seed[1].forEach(function(value) {
                     pollModel.create(value, function(err, createdPoll){
                         if (err) {
-                            console.log(err)
+                            console.log(err) // MODIFY HERE
                         } else if (createdPoll) {
                             userModel.update({_id : data._id},{$push: {polls: createdPoll._id}}, {safe : true, upsert: true}).then(pushed => console.log("Pushed poll to " + data.username));
                         }

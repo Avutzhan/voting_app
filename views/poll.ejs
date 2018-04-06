@@ -1,4 +1,5 @@
 <% include partials/header %>
+
     <h2><%=poll.question%></h2>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
@@ -7,7 +8,7 @@
         <section class="container poll_list">
             <div class="row justify-content-around">
                 <div class="col-md-4">
-                    <p>Click on one of the answers below:</p>
+                    <p>Click on one of the answers below to vote:</p>
                     <% poll.answers.forEach(function(data){ %>    
                         <form action="/poll/<%=poll._id%>?_method=PUT&answer=<%=data.item%>" method="POST">
                             <input type="submit" value="<%=data.item%>" class="btn btn-dark polls_objects">
@@ -15,7 +16,11 @@
                      <% }); %>  
                 </div>
                 <div class="col-md-8">
-                    <canvas id="pollChart"></canvas>
+                    <% if (!graphParameters.data.datasets[0].data.every(value => value == 0)) { %>
+                        <canvas id="pollChart"></canvas>
+                    <% } else { %>
+                        <p style="text-align:center">Nobody has voted yet.</p>
+                    <% } %>
                 </div>
             </div>
         </section>
@@ -23,7 +28,6 @@
         <p style="text-align:center">The author of this poll has not created any answer for this poll yet.</p>
     <% } %>
     
-
 <% include partials/footer %>
 
 <script>
