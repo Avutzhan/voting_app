@@ -4,6 +4,7 @@ var path = require('path'),
     mongoose    = require("mongoose"),
     express = require('express'),
     app = express(),
+    flash = require("connect-flash"),
     passport = require("passport"),
     session = require("express-session"),
     methodOverride = require("method-override"),
@@ -25,10 +26,10 @@ app.use(express.static(__dirname + "/public"));
 app.set("view engine", "ejs");
 app.use(methodOverride('_method'));
 app.use(bodyParser.urlencoded({extended: false}));
-
+app.use(flash());
 //Passport 
 setupPassport();
-app.use(cookieParser());
+app.use(cookieParser("jacktessupporterssontla"));
 app.use(session({
   secret: "forzajuve",
   resave: true,
@@ -44,6 +45,9 @@ seeds();
 
 app.use(function(req, res, next) {
   res.locals.currentUser = req.user;
+  res.locals.success = req.flash('success');
+  res.locals.warning = req.flash('warning');
+  res.locals.error = req.flash('error');
   next();
 });
 
@@ -52,8 +56,15 @@ app.use("/", indexRoutes);
 app.use("/user", userRoutes);
 app.use("/poll", pollRoutes);
 
+app.use(function(err, req, res, next) {
+  console.log(err);
+  req.flash("error","There was an error processing your request, please try again later");
+  res.status(500).redirect("/");
+});
+
 app.use(function(req, res) {
-  res.status(404).send("Sorry, the page you are looking for does not exist.");
+  req.flash("warning","The page you are looking for does not exist");
+  res.status(404).redirect("/");
 });
 
 app.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function(){

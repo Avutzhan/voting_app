@@ -2,7 +2,6 @@ var express = require("express"),
     router  = express.Router(),
     pollModel = require("../models/poll.js"),
     userModel = require("../models/user.js"),
-    passport = require('passport'),
     middlewares = require("../helpers/middlewares.js");
 
 router.get("/new", 
@@ -34,6 +33,7 @@ router.put("/:pollId", function(req, res, next){ // Vote from anybody. Adds +1 t
                 ++pollRetrieved.answers[pollRetrieved.answers.indexOf(data)].count;
                 pollRetrieved.save(function(err){
                     if (err) { return next(err); }
+                    req.flash("success","Vote successfully registered");
                     return res.redirect('back');   
                 })
             }
@@ -68,7 +68,8 @@ router.delete("/:pollId",
         if (err) { return next(err); }
             userModel.findByIdAndUpdate(userID, { $pull: { "polls": pollID} }, function (err, removedPoll) {
                 if (err) { return next(err); }
-                res.redirect("/user/" + userID); // NEED FLASH HERE
+                req.flash("success","Poll successfully deleted");
+                res.redirect("/user/" + userID);
             });
         });
     }

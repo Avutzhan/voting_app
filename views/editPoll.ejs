@@ -3,7 +3,7 @@
     <h2>Edit Poll</h2>
     
     <section class="container-fluid">
-        <form action="/poll/<%= poll._id %>/edit?_method=PUT" method="post">
+        <form action="/poll/<%= poll._id %>/edit?_method=PUT" method="post" onsubmit="return confirm('You are about to modify the poll. OK?');">
             <div class="form-group">
                 <label for="question">Question</label>
                 <input type="text" class="form-control" id="question" name="question" value="<%= poll.question %>" required autofocus>
@@ -35,7 +35,7 @@
         </form>
         <br>
         <br>
-        <form action="/poll/<%= poll._id %>?_method=DELETE" method="post">
+        <form action="/poll/<%= poll._id %>?_method=DELETE" method="post" onsubmit="return confirm('You are about to delete the poll. OK?');">
             <input type="submit" value="DELETE POLL" class="btn btn-danger btn-block">
         </form>
     </section>

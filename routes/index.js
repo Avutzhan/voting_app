@@ -16,10 +16,21 @@ router.get("/", function(req, res){
 router.get("/login", function(req, res){
     res.render("login");
 });
-
-router.post('/login', // Use custom callback to redirect to user/id
-    passport.authenticate('local', { successRedirect: '/yes', failureRedirect: '/no'/*, failureFlash: true*/ })
-);
+  
+router.post('/login', function(req, res, next) {
+  passport.authenticate('local', function(err, user, info) {
+    if (err) { return next(err); }
+    if (!user) { 
+        req.flash("warning","Invalid username or password");
+        return res.redirect('/login'); 
+    }
+    req.logIn(user, function(err) {
+      if (err) { return next(err); }
+      req.flash("success","Login successful");
+      return res.redirect('/user/' + user._id);
+    });
+  })(req, res, next);
+});
 
 router.get("/signup", function(req, res){
     res.render("signup");
@@ -27,6 +38,7 @@ router.get("/signup", function(req, res){
 
 router.get('/logout', function(req, res){
   req.logout();
+  req.flash("success","Logout successful");
   res.redirect('/');
 });
 

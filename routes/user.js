@@ -9,7 +9,16 @@ var express = require("express"),
 router.post("/new", 
     middlewares.confirmPassword,
     middlewares.createUser,
-    passport.authenticate('local', { successRedirect: '/yes', failureRedirect: '/no'/*, failureFlash: true*/ })
+    function(req, res, next) {
+        passport.authenticate('local', function(err, user, info) {
+            if (err) { return next(err); }
+            req.logIn(user, function(err) {
+              if (err) { return next(err); }
+              req.flash("success","Signup and login successful");
+              return res.redirect('/user/' + user._id);
+            });
+        })(req, res, next);
+    }
 );
 
 router.get("/:userID", 
@@ -26,7 +35,7 @@ router.get("/:userID",
     }
 );
 
-router.put("/:userID", // ADD FLASH!  Modify passowrd
+router.put("/:userID", //Modify passowrd
     middlewares.confirmPassword,
     middlewares.isLogged, 
     middlewares.isUser, 

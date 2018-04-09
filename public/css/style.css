@@ -15,6 +15,11 @@ body {
 	color: rgb(33, 37, 41);
 }
 
+.alert {
+	text-align: center !important;
+	position: relative !important
+}
+
 .btn:focus, .btn:active, button:focus, button:active, a:focus, a:active {
   outline: none !important;
   box-shadow: none !important;
@@ -34,7 +39,7 @@ body {
 
 h1 {
 	font-weight: 700 !important; 
-	margin-top: 100px;
+	margin-top: 2%;
 	text-align: center;
 	font-size: 4em;
 }

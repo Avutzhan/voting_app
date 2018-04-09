@@ -3,7 +3,7 @@
     <h2>Create a New Poll</h2>
     
     <section class="container-fluid">
-        <form action="/poll/new" method="post">
+        <form action="/poll/new" method="post" onsubmit="return confirm('You are about to create the poll. OK?');">
             <div class="form-group">
                 <label for="question">Question</label>
                 <input type="text" class="form-control" id="question" name="question" placeholder="Enter your question here" required autofocus>

@@ -1,5 +1,6 @@
-var userModel = require("../models/user.js");
-var pollModel = require("../models/poll.js");
+var userModel = require("../models/user.js"),
+pollModel = require("../models/poll.js"),
+flash = require("connect-flash");
 
 exports.GraphCreator = function (poll) {
     this.type = "pie";
@@ -32,19 +33,20 @@ exports.GraphCreator = function (poll) {
     };
 };
 
-exports.confirmPassword = function(req, res, next) { // ADD FLASH!
-  if (req.body.password == req.body.confirmPassword) { return next();}
-  return res.send("Passwords do not match. Please try again.") // TO BO MODIFIED
-}
+exports.confirmPassword = function(req, res, next) {
+  if (req.body.password == req.body.confirmPassword) { return next(); }
+  req.flash("warning","Passwords do not match, please try again");
+  return res.redirect('back');
+};
 
-exports.createUser = function(req, res, next) { // ADD FLASH!
+exports.createUser = function(req, res, next) {
   var username = req.body.username;
   var password = req.body.password;
   userModel.findOne({ username: username }, function(err, user) {
     if (err) { return next(err); }
     if (user) {
-      //req.flash("error", "User already exists");
-      return res.redirect("/exist");  // TO BO MODIFIED
+      req.flash("warning","Username already exists, please choose another one");
+      return res.redirect("back");  
     }
     
     userModel.create({ username: username, password: password}, function(err, data){
@@ -60,8 +62,8 @@ exports.updatePassword = function(req, res, next) { // ADD FLASH! CHECK IF HAVE 
   var newPassword = req.body.password;
   userModel.findByIdAndUpdate(userId, { password : newPassword }, function(err, user) {
     if (err) { return next(err); }
-      //req.flash("error", "User already exists");
-      return res.redirect("/modified");  // TO BO MODIFIED
+    req.flash("success","Password successfully updated");
+    return res.redirect("back");
   });
 };
 
@@ -69,17 +71,17 @@ exports.isLogged = function (req, res, next) { // ADD FLASH!
   if (req.isAuthenticated()) {
     next();
   } else {
-    //req.flash("info", "You must be logged in to see this page.");
+    req.flash("warning", "You must be logged in to perform this action");
     res.redirect("/login");
   }
 };
 
-exports.isUser = function (req, res, next) {  // ADD FLASH!
+exports.isUser = function (req, res, next) {
   if (req.user._id == req.params.userID) {
     next();
   } else {
-    //req.flash("info", "Forbidden");
-    res.redirect("/user/" + req.user._id);
+    req.flash("warning","You are not allowed to perform this action");
+    res.redirect("/");
   }
 };
 
@@ -94,26 +96,27 @@ exports.formatAnswer = function(req, res, next) { // Formats the form to then be
   next();
 };
 
-exports.createNewPoll = function(req, res, next) { // NEED FLASH when created. Create new poll in DB.
+exports.createNewPoll = function(req, res, next) { // Create new poll in DB.
   pollModel.create(req.pollToCreate, function(err, createdPoll){
     if (err) { return next(err); }
     userModel.findByIdAndUpdate(req.user._id, { $push: { polls: { $each: [createdPoll._id], $position: 0 } } }, function(err, user) {
       if (err) { return next(err); }
-      res.redirect("/poll/" + createdPoll._id); // FLASH HERE
+      req.flash("success","Poll successfully created");
+      res.redirect("/poll/" + createdPoll._id);
     });
   });
 };
 
-exports.ownsPoll = function (req, res, next) {  // ADD FLASH!
+exports.ownsPoll = function (req, res, next) {
   if ( req.user.polls.indexOf(req.params.pollId) != -1 ) {
     next();
   } else {
-    //req.flash("info", "Forbidden");
-    res.redirect("/user/" + req.user._id);
+    req.flash("warning","You can only perform actions on your own polls");
+    res.redirect("back");
   }
 };
 
-exports.updatePoll = function (req, res, next) {  // ADD FLASH!
+exports.updatePoll = function (req, res, next) {
   var toDelete = req.body.toDelete,
   toAdd = req.body.answers;
   
@@ -127,9 +130,7 @@ exports.updatePoll = function (req, res, next) {  // ADD FLASH!
     if (toDelete) { // Remove the answers to be deleted if user selected any answer to delete
       pollToUpdate.answers = pollToUpdate.answers.filter(data => toDelete.indexOf(data.item) == -1);
     }
-    console.log(toDelete);
-    console.log(toAdd);
-    
+
     if (toAdd) { // Add new answers if user input any
       if (typeof toAdd === 'object') { // If user user only adds 1 answer, value is a string (otherwise array). So have to identify the case to take proper action.
         toAdd.forEach(data => pollToUpdate.answers.push({item: data}));
@@ -140,23 +141,10 @@ exports.updatePoll = function (req, res, next) {  // ADD FLASH!
 
     pollToUpdate.save(function(err,end){
       if (err) { return next(err); }
-      //req.flash("info", "OK");
+      req.flash("success","Poll successfully updated");
       res.redirect("/user/" + req.user._id);
     });
   });
-  
-
 };
 
-/*
-title: String,
-   question: String,
-   dateCreated : { type: Date, default: Date.now },
-   answers: [
-      {
-         item : String,
-         count : { type: Number, default: 0 }
-      }
-   ],
-*/
 module.exports = exports;
