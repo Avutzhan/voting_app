@@ -17,9 +17,9 @@ router.post("/new",
     middlewares.createNewPoll
 );
 
-router.get("/:pollId", function(req, res, next){ // NEED TO HANDLE WHEN GIVE A WRONG ID, OTHERWIE WILL BUG
+router.get("/:pollId", function(req, res, next){ 
     pollModel.findOne({_id : req.params.pollId}, function(err,pollRetrieved) {
-        if (err) { return next(err); }
+        if ( (err) || (!pollRetrieved) ) { return next(err); }
         var graphParameters = new middlewares.GraphCreator(pollRetrieved);
         return res.render("poll", {poll:pollRetrieved, graphParameters : graphParameters}); // UPDATE FOR GRAPH
     });
@@ -41,7 +41,7 @@ router.put("/:pollId", function(req, res, next){ // Vote from anybody. Adds +1 t
     });
 });
 
-router.get("/:pollId/edit", 
+router.get("/:pollId/edit", // Enables user owing the poll to modify it
     middlewares.isLogged,
     middlewares.ownsPoll,
     function(req, res, next) {

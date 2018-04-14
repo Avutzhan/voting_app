@@ -1,7 +1,6 @@
 var mongoose = require("mongoose");
 var passportLocalMongoose = require("passport-local-mongoose");
 var Schema = mongoose.Schema;
-require('dotenv').config();
 
 var UserSchema = new Schema({
     username: { type: String, required: true, unique: true },

@@ -2,7 +2,7 @@ var userModel = require("../models/user.js"),
 pollModel = require("../models/poll.js"),
 flash = require("connect-flash");
 
-exports.GraphCreator = function (poll) {
+exports.GraphCreator = function (poll) { // Creates the object with all the needed poll graph information to be passed to chart.js for displaying polls graphs
     this.type = "pie";
     var tempLabels = [],
         tempCount = [],
@@ -33,13 +33,13 @@ exports.GraphCreator = function (poll) {
     };
 };
 
-exports.confirmPassword = function(req, res, next) {
+exports.confirmPassword = function(req, res, next) { // Ensures passwords are the same in signup or modify forms
   if (req.body.password == req.body.confirmPassword) { return next(); }
   req.flash("warning","Passwords do not match, please try again");
   return res.redirect('back');
 };
 
-exports.createUser = function(req, res, next) {
+exports.createUser = function(req, res, next) { // Creates user in DB
   var username = req.body.username;
   var password = req.body.password;
   userModel.findOne({ username: username }, function(err, user) {
@@ -58,7 +58,7 @@ exports.createUser = function(req, res, next) {
   });
 };
 
-exports.updatePassword = function(req, res, next) { // CHECK IF HAVE TO MODIFY BECAUSE OF MONGOOSE PASSPORT PLUGIN ENEBALING
+exports.updatePassword = function(req, res, next) { // Updates user's password in DB
   var userId = req.user._id;
   var newPassword = req.body.password;
   userModel.findByIdAndUpdate(userId, { password : newPassword }, function(err, user) {
@@ -68,7 +68,7 @@ exports.updatePassword = function(req, res, next) { // CHECK IF HAVE TO MODIFY B
   });
 };
 
-exports.isLogged = function (req, res, next) {
+exports.isLogged = function (req, res, next) { // Ensures the user is logged
   if (req.isAuthenticated()) {
     next();
   } else {
@@ -77,7 +77,7 @@ exports.isLogged = function (req, res, next) {
   }
 };
 
-exports.isUser = function (req, res, next) {
+exports.isUser = function (req, res, next) { // Ensures the user the right one being alloed to modify its profile
   if (req.user._id == req.params.userID) {
     next();
   } else {
@@ -97,7 +97,7 @@ exports.formatAnswer = function(req, res, next) { // Formats the form to then be
   next();
 };
 
-exports.createNewPoll = function(req, res, next) { // Create new poll in DB.
+exports.createNewPoll = function(req, res, next) { // Create new poll in DB
   pollModel.create(req.pollToCreate, function(err, createdPoll){
     if (err) { return next(err); }
     userModel.findByIdAndUpdate(req.user._id, { $push: { polls: { $each: [createdPoll._id], $position: 0 } } }, function(err, user) {
@@ -108,7 +108,7 @@ exports.createNewPoll = function(req, res, next) { // Create new poll in DB.
   });
 };
 
-exports.ownsPoll = function (req, res, next) {
+exports.ownsPoll = function (req, res, next) { // Checks if the user owns the poll to modify it
   if ( req.user.polls.indexOf(req.params.pollId) != -1 ) {
     next();
   } else {
@@ -117,7 +117,7 @@ exports.ownsPoll = function (req, res, next) {
   }
 };
 
-exports.updatePoll = function (req, res, next) {
+exports.updatePoll = function (req, res, next) { // Updates poll in DB
   var toDelete = req.body.toDelete,
   toAdd = req.body.answers;
   

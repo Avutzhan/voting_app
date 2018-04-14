@@ -1,5 +1,4 @@
 var mongoose = require("mongoose");
-require('dotenv').config();
 
 var pollSchema = new mongoose.Schema({
    question: String,

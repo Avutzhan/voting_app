@@ -10,11 +10,6 @@ var path = require('path'),
     methodOverride = require("method-override"),
     setupPassport = require("./helpers/passportconfig.js");
     
-    
-
-require('dotenv').config();
-
-
 //requiring routes
 var indexRoutes = require("./routes/index"),
     userRoutes = require("./routes/user"),
