@@ -1,4 +1,5 @@
 var mongoose = require("mongoose");
+require('dotenv').config();
 
 var pollSchema = new mongoose.Schema({
    question: String,
@@ -11,4 +12,4 @@ var pollSchema = new mongoose.Schema({
    ],
 });
 
-module.exports = mongoose.model("Poll", pollSchema);
+module.exports = mongoose.model(process.env.mongo_polldb, pollSchema);

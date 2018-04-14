@@ -6,15 +6,15 @@ module.exports = function() {
 //Seeding
 userModel.remove()
 .then(function (product) {
-   console.log("All users removed");
-   return pollModel.remove()
+    console.log("All users removed");
+    return pollModel.remove()
 })
 .then(function (product) {
-   console.log("All polls removed");
+    console.log("All polls removed");
     return load();
 })
 .catch(function (err) {
-   console.log(err);
+    console.log(err);
 })
 
 var polls = [

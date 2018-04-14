@@ -39,10 +39,10 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Seeder 
-/*
+
 var seeds = require("./models/seeds.js");
 seeds();
-*/
+
 //
 
 app.use(function(req, res, next) {
