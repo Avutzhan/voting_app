@@ -19,13 +19,13 @@
                     <% if (!graphParameters.data.datasets[0].data.every(value => value == 0)) { %>
                         <canvas id="pollChart"></canvas>
                     <% } else { %>
-                        <p style="text-align:center">Nobody has voted yet.</p>
+                        <p style="text-align:center">Nobody has voted yet</p>
                     <% } %>
                 </div>
             </div>
         </section>
     <% } else { %>
-        <p style="text-align:center">The author of this poll has not created any answer for this poll yet.</p>
+        <p style="text-align:center">The author of this poll has not created any answer for this poll yet</p>
     <% } %>
     
 <% include partials/footer %>
