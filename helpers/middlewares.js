@@ -49,7 +49,8 @@ exports.createUser = function(req, res, next) {
       return res.redirect("back");  
     }
     
-    userModel.create({ username: username, password: password}, function(err, data){
+    var newUser = new userModel({username});
+    userModel.register(newUser, password, function(err, user){
         if (err) { return next(err); }
         return next();
     });
@@ -57,7 +58,7 @@ exports.createUser = function(req, res, next) {
   });
 };
 
-exports.updatePassword = function(req, res, next) { // ADD FLASH! CHECK IF HAVE TO MODIFY BECAUSE OF MONGOOSE PASSPORT PLUGIN ENEBALING
+exports.updatePassword = function(req, res, next) { // CHECK IF HAVE TO MODIFY BECAUSE OF MONGOOSE PASSPORT PLUGIN ENEBALING
   var userId = req.user._id;
   var newPassword = req.body.password;
   userModel.findByIdAndUpdate(userId, { password : newPassword }, function(err, user) {
@@ -67,7 +68,7 @@ exports.updatePassword = function(req, res, next) { // ADD FLASH! CHECK IF HAVE 
   });
 };
 
-exports.isLogged = function (req, res, next) { // ADD FLASH!
+exports.isLogged = function (req, res, next) {
   if (req.isAuthenticated()) {
     next();
   } else {

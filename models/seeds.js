@@ -35,8 +35,16 @@ var users = [
 
 
 function load() {
+    /*
+    var newUser = new userModel({username});
+    userModel.register(newUser, password, function(err, user){
+        if (err) { return next(err); }
+        return next();
+    });
+    */
     users.forEach(function(seed){
-        userModel.create(seed[0], function(err, data){
+        var newUser = new userModel({username: seed[0]["username"]});
+        userModel.register(newUser, seed[0]["password"], function(err, data){
             if (err) {
                 console.log(err);  // MODIFY HERE
             } else {
