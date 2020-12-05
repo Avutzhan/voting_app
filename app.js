@@ -16,7 +16,8 @@ var indexRoutes = require("./routes/index"),
     pollRoutes = require("./routes/poll");
     
 
-mongoose.connect("mongodb://" + process.env.mongo_user + ":" + process.env.mongo_pwd + "@" + process.env.mongo_uri);
+mongoose.connect("mongodb+srv://" + process.env.mongo_user + ":" + process.env.mongo_pwd + "@" + process.env.mongo_uri);
+
 app.use(express.static(__dirname + "/public"));
 app.set("view engine", "ejs");
 app.use(methodOverride('_method'));
