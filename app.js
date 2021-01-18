@@ -9,6 +9,7 @@ var path = require('path'),
     session = require("express-session"),
     methodOverride = require("method-override"),
     setupPassport = require("./helpers/passportconfig.js");
+    require('dotenv').config();
     
 //requiring routes
 var indexRoutes = require("./routes/index"),
@@ -16,7 +17,12 @@ var indexRoutes = require("./routes/index"),
     pollRoutes = require("./routes/poll");
     
 
-mongoose.connect("mongodb+srv://" + process.env.mongo_user + ":" + process.env.mongo_pwd + "@" + process.env.mongo_uri);
+mongoose.connect(process.env.DATABASE, {
+  useCreateIndex: true,
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useFindAndModify: false,
+});
 
 app.use(express.static(__dirname + "/public"));
 app.set("view engine", "ejs");
@@ -27,7 +33,7 @@ app.use(flash());
 setupPassport();
 app.use(cookieParser("jacktessupporterssontla"));
 app.use(session({
-  secret: "forzajuve",
+  secret: process.env.SECRET,
   resave: true,
   saveUninitialized: true
 }));
@@ -65,6 +71,6 @@ app.use(function(req, res) {
   res.status(404).redirect("/");
 });
 
-app.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function(){
+app.listen(process.env.PORT || 3000, function(){
   console.log("Server listening...");
 });
