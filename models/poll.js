@@ -11,4 +11,4 @@ var pollSchema = new mongoose.Schema({
    ],
 });
 
-module.exports = mongoose.model(process.env.mongo_polldb, pollSchema);
+module.exports = mongoose.model('Poll', pollSchema);
